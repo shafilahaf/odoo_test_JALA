@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odoo_dev_test_jala_odoo_dev_test_jala,odoo_dev_test_jala.odoo_dev_test_jala,model_odoo_dev_test_jala_odoo_dev_test_jala,base.group_user,1,1,1,1
