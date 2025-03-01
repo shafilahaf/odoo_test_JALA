@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="trello_webhook_view_tree" model="ir.ui.view">
+        <field name="name">trello.webhook.view.tree</field>
+        <field name="model">jala.trello.webhook</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="project_id" />
+                <field name="description" />
+                <field name="callback_url" />
+                <field name="is_active" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="trello_webhook_view_form" model="ir.ui.view">
+        <field name="name">trello.webhook.view.form</field>
+        <field name="model">jala.trello.webhook</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="create_webhook" string="Create Webhook" type="object" class="btn-primary" />
+                    <button name="delete_webhook" string="Delete Webhook" type="object" class="btn-danger" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="project_id" string="Project"/>
+                        <h1>
+                            <div class="d-flex">
+                                <field class="o_text_overflow" name="project_id" />
+                            </div>
+                        </h1>
+                        <label for="callback_url" string="Call-Back URL"/>
+                        <h2>
+                            <div class="d-flex">
+                                <field class="o_text_overflow" name="callback_url" />
+                            </div>
+                        </h2>
+                    </div>
+                    <group string="Webhook">
+                        <field name="id_webhook" />
+                        <field name="description" />
+                        <field name="is_active" widget="boolean_toggle" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="trello_webhook_action" model="ir.actions.act_window">
+        <field name="name">Trello Webhook</field>
+        <field name="res_model">jala.trello.webhook</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="trello_webhook_menu" name="Trello Webhook" parent="menu_trello_general" action="trello_webhook_action" sequence="10" />
+
+</odoo>

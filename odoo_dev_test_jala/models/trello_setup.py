@@ -13,10 +13,13 @@ class TrelloSetup(models.Model):
     trello_token = fields.Char(string="Trello Token", required=True)
     is_active = fields.Boolean(string="Active", default=True)
 
+    # Syncronize data
     is_sync_board = fields.Boolean(string="Sync Board", default=False)
     is_sync_list = fields.Boolean(string="Sync List", default=False)
     is_sync_card = fields.Boolean(string="Sync Card", default=False)
     is_sync_member = fields.Boolean(string="Sync Member", default=False)
+
+    # Webhook
 
     def check_trello_connection(self):
         """
@@ -51,14 +54,14 @@ class TrelloSetup(models.Model):
         Syncronize data from Trello to Odoo
         """
         self.ensure_one()
+        if self.is_sync_member:
+            self.sync_member()
         if self.is_sync_board:
             self.sync_board()
         if self.is_sync_list:
             self.sync_list()
         if self.is_sync_card:
             self.sync_card()
-        if self.is_sync_member:
-            self.sync_member()
 
         if self.is_sync_board or self.is_sync_list or self.is_sync_card or self.is_sync_member:
             return{
@@ -72,6 +75,60 @@ class TrelloSetup(models.Model):
             }
         else:
             raise UserError(_("Please select at least one option to syncronize data."))
+        
+    def sync_member(self):
+        """
+        Syncronize member data from Trello to Odoo and create new member in res.users and res.partner model
+        """
+        self.ensure_one()
+        url = f'https://api.trello.com/1/members/me'
+        params = {
+            'key': self.trello_api_key,
+            'token': self.trello_token
+        }
+
+        if not self.trello_api_key or not self.trello_token:
+            raise UserError(_("Trello API Key and Token must be filled."))
+        
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            member = response.json()
+            partner = self.env['res.partner'].search([('trello_member_id', '=', member.get('id'))])
+            if not partner:
+                self.env['res.partner'].create({
+                    'name': member.get('fullName'),
+                    'email': member.get('email'),
+                    'trello_member_id': member.get('id'),
+                    'is_from_trello': True,
+                    'trello_url': member.get('url')
+                })
+            else:
+                partner.write({
+                    'name': member.get('fullName'),
+                    'email': member.get('email'),
+                    'trello_member_id': member.get('id'),
+                    'is_from_trello': True,
+                    'trello_url': member.get('url')
+                })
+
+            # Create user
+            user = self.env['res.users'].search([('partner_id', '=', partner.id)])
+            if not user:
+                self.env['res.users'].create({
+                    'name': member.get('fullName'),
+                    'login': member.get('username'),
+                    'partner_id': partner.id,
+                    'password': "1234",
+                })
+            else:
+                user.write({
+                    'name': member.get('fullName'),
+                    'login': member.get('username'),
+                    'partner_id': partner.id,
+                    'password': "1234",
+                })
+        else:
+            raise UserError(f'Failed to sync member from Trello. Error: {response.text}')
 
     def sync_board(self):
         """
@@ -211,12 +268,12 @@ class TrelloSetup(models.Model):
             else:
                 raise UserError(f'Failed to sync card from Trello. Error: {response.text}')
             
-    def sync_member(self):
+    def get_notification(self):
         """
-        Syncronize member data from Trello to Odoo and create new member in res.users and res.partner model
+        Get notification from Trello
         """
         self.ensure_one()
-        url = f'https://api.trello.com/1/members/me'
+        url = f'https://api.trello.com/1/members/me/notifications'
         params = {
             'key': self.trello_api_key,
             'token': self.trello_token
@@ -227,40 +284,9 @@ class TrelloSetup(models.Model):
         
         response = requests.get(url, params=params)
         if response.status_code == 200:
-            member = response.json()
-            partner = self.env['res.partner'].search([('trello_member_id', '=', member.get('id'))])
-            if not partner:
-                self.env['res.partner'].create({
-                    'name': member.get('fullName'),
-                    'email': member.get('email'),
-                    'trello_member_id': member.get('id'),
-                    'is_from_trello': True,
-                    'trello_url': member.get('url')
-                })
-            else:
-                partner.write({
-                    'name': member.get('fullName'),
-                    'email': member.get('email'),
-                    'trello_member_id': member.get('id'),
-                    'is_from_trello': True,
-                    'trello_url': member.get('url')
-                })
-
-            # Create user
-            user = self.env['res.users'].search([('partner_id', '=', partner.id)])
-            if not user:
-                self.env['res.users'].create({
-                    'name': member.get('fullName'),
-                    'login': member.get('username'),
-                    'partner_id': partner.id,
-                    'password': "1234",
-                })
-            else:
-                user.write({
-                    'name': member.get('fullName'),
-                    'login': member.get('username'),
-                    'partner_id': partner.id,
-                    'password': "1234",
-                })
+            notifications = response.json()
+            for notification in notifications:
+                print(notification)
         else:
-            raise UserError(f'Failed to sync member from Trello. Error: {response.text}')
+            raise UserError(f'Failed to get notification from Trello. Error: {response.text}')
+        

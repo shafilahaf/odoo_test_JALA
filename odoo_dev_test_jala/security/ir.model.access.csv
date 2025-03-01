@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_project_management_jala,project_management_jala_group_user,model_project_management,base.group_user,1,1,1,1
 access_trello_setup_jala,trello_setup_group_user,model_jala_trello_setup,base.group_user,1,1,1,1
+access_trello_logs_jala,trello_logs_group_user,model_jala_trello_logs,base.group_user,1,1,1,1
+access_trello_webhook_jala,trello_webhook_group_user,model_jala_trello_webhook,base.group_user,1,1,1,1

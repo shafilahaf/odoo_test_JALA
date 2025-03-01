@@ -42,12 +42,11 @@
                     </group>
                     <!-- Syncronize -->
                     <group string="Syncronize">
+                        <field name="is_sync_member" />
                         <field name="is_sync_board" />
                         <field name="is_sync_list" />
                         <field name="is_sync_card" />
-                        <field name="is_sync_member" />
 
-                        <!-- Button -->
                         <button name="action_syncronize" string="Sync" type="object" class="btn-info" />
                     </group>
                 </sheet>
