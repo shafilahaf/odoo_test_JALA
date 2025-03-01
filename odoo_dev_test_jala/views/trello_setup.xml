@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree view -->
+    <record id="jala_trello_setup_view_tree" model="ir.ui.view">
+        <field name="name">jala.trello.setup.view.tree</field>
+        <field name="model">jala.trello.setup</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name" />
+                <field name="trello_api_key" />
+                <field name="trello_api_secret" password="True"/>
+                <field name="trello_token" password="True"/>
+                <field name="is_active" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="jala_trello_setup_view_form" model="ir.ui.view">
+        <field name="name">jala.trello.setup.view.form</field>
+        <field name="model">jala.trello.setup</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="check_trello_connection" string="Test Connection" type="object" class="btn-primary" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Name"/>
+                        <h1>
+                            <div class="d-flex">
+                                <field class="o_text_overflow" name="name" />
+                            </div>
+                        </h1>
+                    </div>
+                    <group string="Credentials">
+                        <field name="trello_api_key" />
+                        <field name="trello_api_secret" password="True" />
+                        <field name="trello_token" password="True" />
+                        <field name="is_active" widget="boolean_toggle" />
+                    </group>
+                    <!-- Syncronize -->
+                    <group string="Syncronize">
+                        <field name="is_sync_board" />
+                        <field name="is_sync_list" />
+                        <field name="is_sync_card" />
+                        <field name="is_sync_member" />
+
+                        <!-- Button -->
+                        <button name="action_syncronize" string="Sync" type="object" class="btn-info" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="jala_trello_setup_action" model="ir.actions.act_window">
+        <field name="name">Trello Setup</field>
+        <field name="res_model">jala.trello.setup</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_config_trello" name="Trello" parent="menu_project_management" sequence="90"/>
+    <menuitem id="menu_config_trello_setup" name="Trello Setup" parent="menu_config_trello" sequence="90" />
+    <menuitem id="menu_trello_setup" name="Setup" parent="menu_config_trello_setup" action="jala_trello_setup_action" sequence="10" />
+
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record id="project_task_inherit" model="ir.ui.view">
+            <field name="name">project.task.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='project_id']" position="after">
+                    <field name="trello_card_id"/>
+                    <field name="trello_url" />
+                    <field name="is_from_trello" widget="boolean_toggle"/>
+                </xpath>
+                <xpath expr="//field[@name='date_deadline']" position="before">
+                    <field name="trello_start_date"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+</odoo>

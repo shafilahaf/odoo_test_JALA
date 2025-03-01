@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Odoo - 16",
+            "type": "debugpy",
+            "request": "launch",
+            "stopOnEntry": false,
+            "python": "C://Odoo//Odoo16//python//python.exe",
+            "console": "integratedTerminal",
+            "program": "C://Odoo//Odoo16//server//odoo-bin",
+            "args": [
+                "--config",
+                "C://Odoo//Odoo16//server//odoo.conf",
+                "-d",
+                "Odoo16_Jala", 
+                "-u",
+                "odoo_dev_test_jala"
+            ],
+        }
+    ]
+}
+// Payroll501

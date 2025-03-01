@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record id="res_partner_inherit" model="ir.ui.view">
+            <field name="name">res.partner.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="trello_member_id"/>
+                    <field name="trello_url"/>
+                    <field name="is_from_trello" widget="boolean_toggle"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+</odoo>

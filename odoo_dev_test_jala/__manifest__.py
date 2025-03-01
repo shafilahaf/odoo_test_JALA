@@ -13,11 +13,16 @@
     'author': "SHAFILAH AF",
     'category': 'Uncategorized',
     'version': '0.1',
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail', 'project'],
     'data': [
         'security/ir.model.access.csv',
         'data/project_mgt_mail_template.xml',
         'views/project_management.xml',
+        'views/trello_setup.xml',
+        'views/project_project_inherit.xml',
+        'views/project_task_type_inherit.xml',
+        'views/project_task_inherit.xml',
+        'views/res_partner_inherit.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
