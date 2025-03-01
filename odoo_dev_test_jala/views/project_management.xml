@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="project_management_view_tree" model="ir.ui.view">
+        <field name="name">project.management.view.tree</field>
+        <field name="model">project.management</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="project_name" />
+                <field name="start_date" />
+                <field name="end_date" />
+                <field name="duration" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Form View -->
+    <record id="project_management_view_form" model="ir.ui.view">
+        <field name="name">project.management.view.form</field>
+        <field name="model">project.management</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="project_name" />
+                        <field name="description" />
+                        <field name="project_owner" />
+                        <field name="start_date" />
+                        <field name="end_date" />
+                        <field name="duration" />
+                        <field name="state" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="project_management_action" model="ir.actions.act_window">
+        <field name="name">Project Management</field>
+        <field name="res_model">project.management</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+
+    <!-- Parent -->
+    <menuitem id="menu_project_management" name="Project Management" sequence="10" />
+    <!-- Child -->
+    <menuitem id="menu_project_management_list" name="Project List" parent="menu_project_management" action="project_management_action" sequence="10" />
+</odoo>

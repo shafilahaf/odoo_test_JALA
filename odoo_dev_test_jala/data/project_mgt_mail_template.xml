@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="0">
+
+        <record id="jala_project_mgt_notif_status_mail_template" model="mail.template">
+                <field name="name">JALA: Project Mgt. Notification Project Status</field>
+                <field name="model_id" ref="odoo_dev_test_jala.model_project_management"/>
+                <field name="subject">Project {{ object.project_name }} Status Has Been Changed</field>
+                <field name="email_from">{{ user.email }}</field>
+                <field name="email_to">{{ object.project_owner.email }}</field>
+                <field name="description">Sent to user when project state has been changed</field>
+                <field name="body_html" type="html">
+                    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr><td valign="middle">
+                                                <span style="font-size: 20px; font-weight: bold;">
+                                                    <t t-out="object.project_owner.name or ''"></t>
+                                                </span>
+                                            </td><td valign="middle" align="right">
+                                                <img t-attf-src="/logo.png?company={{ user.company_id.id }}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" t-att-alt="user.company_id.name"/>
+                                            </td></tr>
+                                            <tr><td colspan="2" style="text-align:center;">
+                                            <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                            </td></tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr><td valign="top" style="font-size: 13px;">
+                                                <div>
+                                                    Dear <t t-out="object.project_owner.name or ''"></t>,<br/><br/>
+                                                    We wanted to inform you that the status of your project "<t t-out="object.project_name or ''" />" has been updated.<br/>
+                                                    Current Status : 
+                                                    <strong>
+                                                        <t t-if="object.state == 'aktif'">Aktif</t>
+                                                        <t t-elif="object.state == 'selesai'">Selesai</t>
+                                                        <t t-elif="object.state == 'ditangguhkan'">Ditangguhkan</t>
+                                                    </strong><br/>
+                                                    Update by: <t t-out="user.name or ''" /><br/><br/>
+
+                                                    You can always track the progress of your project or check further details by clicking the link below:<br/>
+                                                    <div style="margin: 16px 0px 16px 0px;">
+                                                        <a t-attf-href="/web#id={{object.id}}&amp;model=project.management&amp;view_type=form" style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                            View Project Details
+                                                        </a>
+                                                    </div>
+                                                    If you have any questions or need assistance, please feel free to reach out to us.<br/><br/>
+                                                    Thanks,<br/>
+                                                    <t t-if="user.signature">
+                                                        <br/>
+                                                        <t t-out="user.signature or ''"/><br/>--<br/><t t-out="user.name or ''"/>
+                                                    </t>
+                                                </div>
+                                            </td></tr>
+                                            <tr><td style="text-align:center;">
+                                            <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                            </td></tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr><td valign="middle" align="left">
+                                                <t t-out="user.company_id.name or ''"></t>
+                                            </td></tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td></tr></table>
+                </field>
+                <field name="lang">{{ object.project_owner.lang }}</field>
+                <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>
+
+</odoo>
