@@ -103,6 +103,9 @@ class TrelloWebhook(models.Model):
         raise UserError("Failed to fetch logs")
     
     def action_fetch_scheduler(self):
+        """
+        Scheduler for FETCH Logs
+        """
         webhook = self.env['jala.trello.webhook'].search([('callback_url','!=','')])
         if webhook:
             webhook.action_fetch_logs()
