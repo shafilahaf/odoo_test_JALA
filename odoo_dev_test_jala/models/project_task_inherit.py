@@ -9,3 +9,4 @@ class ProjectTaskInherit(models.Model):
     trello_start_date = fields.Date(string="Trello Start Date", readonly=True)
     trello_url = fields.Char(string="Trello URL", readonly=True)
     
+    

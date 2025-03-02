@@ -14,6 +14,7 @@
                 <field name="actions_before" />
                 <field name="actions_after" />
                 <field name="tasks_id" string="Refer to Task"/>
+                <field name="is_from_webhook" />
             </tree>
         </field>
     </record>
