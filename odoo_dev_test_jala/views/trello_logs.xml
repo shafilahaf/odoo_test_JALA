@@ -7,9 +7,25 @@
         <field name="model">jala.trello.logs</field>
         <field name="arch" type="xml">
             <tree string="">
-                <field name="events_type" />
-                <field name="data" />
+                <field name="events_type" string="Method"/>
+                <field name="data" invisible="1"/>
+                <field name="actions" invisible="1"/>
+                <field name="translation_key" />
+                <field name="actions_before" />
+                <field name="actions_after" />
+                <field name="tasks_id" string="Refer to Task"/>
             </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="jala_trello_logs_view_search" model="ir.ui.view">
+        <field name="name">jala.trello.logs.view.search</field>
+        <field name="model">jala.trello.logs</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <filter name="actions_before_non_empty" string="Actions Before is Set" domain="[('actions_before', '!=', False), ('actions_before', '!=', '')]" />
+            </search>
         </field>
     </record>
 
@@ -18,7 +34,8 @@
         <field name="name">Trello Logs</field>
         <field name="res_model">jala.trello.logs</field>
         <field name="view_mode">tree</field>
-        <field name="context">{'create': False, 'edit': False, 'delete': True}</field>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+        <field name="context">{'search_default_actions_before_non_empty': 1}</field>
     </record>
 
     <!-- Menu -->

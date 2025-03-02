@@ -16,7 +16,7 @@ class TrelloWebhook(models.Model):
         """
         Create webhook in Trello"""
         trello_setup = self.env['jala.trello.setup'].search([], limit=1)
-        url = "https://api.trello.com/1/tokens/" + trello_setup.trello_token + "/webhooks/"
+        url = "https://api.trello.com/" + str(1) +"/tokens/" + trello_setup.trello_token + "/webhooks/"
         
         if not trello_setup:
             raise UserError(_("Trello setup is not configured"))
