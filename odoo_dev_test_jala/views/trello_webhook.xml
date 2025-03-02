@@ -23,6 +23,7 @@
             <form string="">
                 <header>
                     <button name="create_webhook" string="Create Webhook" type="object" class="btn-primary" />
+                    <button name="action_fetch_logs" string="Fetch" type="object" class="btn-info" />
                     <button name="delete_webhook" string="Delete Webhook" type="object" class="btn-danger" />
                 </header>
                 <sheet>
@@ -49,6 +50,18 @@
             </form>
         </field>
     </record>
+
+    <!-- Scheduler to Fetch -->
+    <record id="ir_cron_fetch_logs" model="ir.cron">
+        <field name="name">Fetch Trello Webhook Logs</field>
+        <field name="model_id" ref="model_jala_trello_webhook"/>
+        <field name="state">code</field>
+        <field name="code">model.action_fetch_scheduler()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="active" eval="True"/>
+    </record>
+
 
     <!-- Action -->
     <record id="trello_webhook_action" model="ir.actions.act_window">

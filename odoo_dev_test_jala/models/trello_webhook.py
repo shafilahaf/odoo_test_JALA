@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 import requests
+import json
 
 class TrelloWebhook(models.Model):
     _name = 'jala.trello.webhook'
@@ -54,3 +55,54 @@ class TrelloWebhook(models.Model):
         self.id_webhook = False
         self.description = False
         self.is_active = False
+
+    def action_fetch_logs(self):
+        """ 
+        Fetch logs from webhook.site based on the callback URL in the JALA webhook.
+        """
+        if not self.callback_url:
+            raise UserError("No webhook callback URL found")
+
+        webhook_site_token = self.callback_url.split('/')[-1]  # Get token from callback URL
+        url = f"https://webhook.site/token/{webhook_site_token}/requests"
+        headers = {"Accept": "application/json"}
+
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            try:
+                requests_data = response.json()
+
+                if isinstance(requests_data.get('data'), list):
+                    for req in requests_data['data']:
+                        if isinstance(req, dict) and 'uuid' in req:
+                            # Check if the log exists already
+                            existing_log = self.env['jala.trello.logs'].sudo().search([('log_id', '=', req.get('uuid', 'None'))], limit=1)
+                            
+                            if not existing_log:
+                                self.env['jala.trello.logs'].sudo().create({
+                                    'log_id': req.get('uuid', 'None'),
+                                    'events_type': req.get('method', 'None'),
+                                    'data': json.dumps(req, indent=4, ensure_ascii=False)
+                                })
+                    return{
+                        'type': 'ir.actions.client',
+                        'tag': 'display_notification',
+                        'params': {
+                            'title': _('Success'),
+                            'message': _('Fetch Data is successful'),
+                            'sticky': False
+                        }
+                    }
+                else:
+                    raise UserError("Invalid data format received")
+
+            except json.JSONDecodeError:
+                raise UserError("Failed to decode JSON response")
+
+        raise UserError("Failed to fetch logs")
+    
+    def action_fetch_scheduler(self):
+        webhook = self.env['jala.trello.webhook'].search([('callback_url','!=','')])
+        if webhook:
+            webhook.action_fetch_logs()
