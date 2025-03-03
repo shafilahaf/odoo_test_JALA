@@ -59,6 +59,7 @@
         <field name="code">model.action_fetch_scheduler()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">minutes</field>
+         <field name="nextcall" eval="(datetime.now())"/>
         <field name="active" eval="True"/>
     </record>
 

@@ -76,16 +76,46 @@ class TrelloWebhook(models.Model):
                 if isinstance(requests_data.get('data'), list):
                     for req in requests_data['data']:
                         if isinstance(req, dict) and 'uuid' in req:
-                            # Check if the log exists already
+                            # Check logs is exist or not
                             existing_log = self.env['jala.trello.logs'].sudo().search([('log_id', '=', req.get('uuid', 'None'))], limit=1)
-                            
+
                             if not existing_log:
+                                # variables
+                                action_data = {}
+                                translation_key = ""
+                                action_before = ""
+                                action_after = ""
+                                task = False
+
+                                if 'content' in req and req['content']:
+                                    try:
+                                        content_data = json.loads(req["content"])
+                                        action_data = content_data.get("action", {})
+
+                                        # extract for field in logs from json
+                                        translation_key = action_data.get("display", {}).get("translationKey", "")
+                                        action_before = action_data.get("display", {}).get("entities", {}).get("listBefore", {}).get("text", "")
+                                        action_after = action_data.get("display", {}).get("entities", {}).get("listAfter", {}).get("text", "")
+                                        task_id = action_data.get("display", {}).get("entities", {}).get("card", {}).get("id", "")
+
+                                        # get task id
+                                        task = self.env['project.task'].search([('trello_card_id','=',task_id)], limit=1)
+                                    except json.JSONDecodeError:
+                                        continue
+                                # Create logs
                                 self.env['jala.trello.logs'].sudo().create({
                                     'log_id': req.get('uuid', 'None'),
                                     'events_type': req.get('method', 'None'),
-                                    'data': json.dumps(req, indent=4, ensure_ascii=False)
+                                    'data': json.dumps(req, indent=4, ensure_ascii=False),
+                                    'actions_type': action_data.get("type", ""),
+                                    'translation_key': translation_key,
+                                    'actions_before': action_before,
+                                    'actions_after': action_after,
+                                    'tasks_id': task.id if task else False,
+                                    'is_from_webhook': True,
                                 })
-                    return{
+
+                    return {
                         'type': 'ir.actions.client',
                         'tag': 'display_notification',
                         'params': {
@@ -101,7 +131,7 @@ class TrelloWebhook(models.Model):
                 raise UserError("Failed to decode JSON response")
 
         raise UserError("Failed to fetch logs")
-    
+
     def action_fetch_scheduler(self):
         """
         Scheduler for FETCH Logs

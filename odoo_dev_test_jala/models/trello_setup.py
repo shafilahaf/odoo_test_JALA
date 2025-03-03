@@ -19,7 +19,6 @@ class TrelloSetup(models.Model):
     is_sync_card = fields.Boolean(string="Sync Card", default=False)
     is_sync_member = fields.Boolean(string="Sync Member", default=False)
 
-    # Webhook
 
     def check_trello_connection(self):
         """
