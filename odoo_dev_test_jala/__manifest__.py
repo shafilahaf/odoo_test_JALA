@@ -13,7 +13,7 @@
     'author': "SHAFILAH AF",
     'category': 'Uncategorized',
     'version': '0.1',
-    'depends': ['base', 'mail', 'project', 'contacts'],
+    'depends': ['base', 'mail', 'project', 'contacts', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'data/project_mgt_mail_template.xml',

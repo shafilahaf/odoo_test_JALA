@@ -16,6 +16,20 @@ class ProjectMgt(models.Model):
     duration = fields.Integer(string="Durasi", compute="_compute_duration", store=True)
     project_owner = fields.Many2one('res.users', string="Pemilik Proyek", required=True)
 
+    @api.onchange('project_owner')
+    def _onchange_project_owner(self):
+        """
+        Validation project owner
+        """
+        if self.project_owner and not self.project_owner.email:
+            self.project_owner = False
+            return {
+                'warning': {
+                    'title': _("Peringatan"),
+                    'message': _("Pemilik proyek harus memiliki email. Silakan pilih user yang memiliki email."),
+                }
+            }
+
     def write(self, vals):
         """
         Send an email to project owner when the state project is changed.
