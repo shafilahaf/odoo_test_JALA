@@ -5,7 +5,7 @@
 
         <record id="jala_project_mgt_notif_status_mail_template" model="mail.template">
                 <field name="name">JALA: Project Mgt. Notification Project Status</field>
-                <field name="model_id" ref="odoo_dev_test_jala.model_project_management"/>
+                <field name="model_id" ref="odoo_test_JALA.model_project_management"/>
                 <field name="subject">Project {{ object.project_name }} Status Has Been Changed</field>
                 <field name="email_from">{{ user.email }}</field>
                 <field name="email_to">{{ object.project_owner.email }}</field>
