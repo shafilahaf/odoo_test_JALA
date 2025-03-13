@@ -42,7 +42,7 @@ class ProjectMgt(models.Model):
             res = super(ProjectMgt, self).write(vals)
 
             if old_state != new_state:
-                mail_template_notif = self.env.ref('odoo_dev_test_jala.jala_project_mgt_notif_status_mail_template')
+                mail_template_notif = self.env.ref('odoo_test_JALA.jala_project_mgt_notif_status_mail_template')
                 if mail_template_notif:
                     mail_template_notif.send_mail(rec.id, force_send=True)
 

@@ -7,4 +7,4 @@ from . import project_task_inherit
 from . import res_partner_inherit
 from . import trello_logs
 from . import trello_webhook
-from . import stock_picking_inherit
+# from . import stock_picking_inherit
